@@ -10,8 +10,8 @@ import (
 
 // Represents a Physical Point in geographic notation [lat, lng].
 type Point struct {
-	lat float64
-	lng float64
+	Lat float64
+	Lng float64
 }
 
 const (
@@ -21,17 +21,7 @@ const (
 
 // Returns a new Point populated by the passed in latitude (lat) and longitude (lng) values.
 func NewPoint(lat float64, lng float64) *Point {
-	return &Point{lat: lat, lng: lng}
-}
-
-// Returns Point p's latitude.
-func (p *Point) Lat() float64 {
-	return p.lat
-}
-
-// Returns Point p's longitude.
-func (p *Point) Lng() float64 {
-	return p.lng
+	return &Point{Lat: lat, Lng: lng}
 }
 
 // Returns a Point populated with the lat and lng coordinates
@@ -44,8 +34,8 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 
 	bearing = (bearing * (math.Pi / 180.0))
 
-	lat1 := (p.lat * (math.Pi / 180.0))
-	lng1 := (p.lng * (math.Pi / 180.0))
+	lat1 := (p.Lat * (math.Pi / 180.0))
+	lng1 := (p.Lng * (math.Pi / 180.0))
 
 	lat2_part1 := math.Sin(lat1) * math.Cos(dr)
 	lat2_part2 := math.Cos(lat1) * math.Sin(dr) * math.Cos(bearing)
@@ -61,17 +51,17 @@ func (p *Point) PointAtDistanceAndBearing(dist float64, bearing float64) *Point 
 	lat2 = lat2 * (180.0 / math.Pi)
 	lng2 = lng2 * (180.0 / math.Pi)
 
-	return &Point{lat: lat2, lng: lng2}
+	return &Point{Lat: lat2, Lng: lng2}
 }
 
 // Calculates the Haversine distance between two points in kilometers.
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) GreatCircleDistance(p2 *Point) float64 {
-	dLat := (p2.lat - p.lat) * (math.Pi / 180.0)
-	dLon := (p2.lng - p.lng) * (math.Pi / 180.0)
+	dLat := (p2.Lat - p.Lat) * (math.Pi / 180.0)
+	dLon := (p2.Lng - p.Lng) * (math.Pi / 180.0)
 
-	lat1 := p.lat * (math.Pi / 180.0)
-	lat2 := p2.lat * (math.Pi / 180.0)
+	lat1 := p.Lat * (math.Pi / 180.0)
+	lat2 := p2.Lat * (math.Pi / 180.0)
 
 	a1 := math.Sin(dLat/2) * math.Sin(dLat/2)
 	a2 := math.Sin(dLon/2) * math.Sin(dLon/2) * math.Cos(lat1) * math.Cos(lat2)
@@ -87,10 +77,10 @@ func (p *Point) GreatCircleDistance(p2 *Point) float64 {
 // Original Implementation from: http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) BearingTo(p2 *Point) float64 {
 
-	dLon := (p2.lng - p.lng) * math.Pi / 180.0
+	dLon := (p2.Lng - p.Lng) * math.Pi / 180.0
 
-	lat1 := p.lat * math.Pi / 180.0
-	lat2 := p2.lat * math.Pi / 180.0
+	lat1 := p.Lat * math.Pi / 180.0
+	lat2 := p2.Lat * math.Pi / 180.0
 
 	y := math.Sin(dLon) * math.Cos(lat2)
 	x := math.Cos(lat1)*math.Sin(lat2) -
@@ -103,11 +93,11 @@ func (p *Point) BearingTo(p2 *Point) float64 {
 // Calculates the midpoint between 'this' point and the supplied point.
 // Original implementation from http://www.movable-type.co.uk/scripts/latlong.html
 func (p *Point) MidpointTo(p2 *Point) *Point {
-	lat1 := p.lat * math.Pi / 180.0
-	lat2 := p2.lat * math.Pi / 180.0
+	lat1 := p.Lat * math.Pi / 180.0
+	lat2 := p2.Lat * math.Pi / 180.0
 
-	lon1 := p.lng * math.Pi / 180.0
-	dLon := (p2.lng - p.lng) * math.Pi / 180.0
+	lon1 := p.Lng * math.Pi / 180.0
+	dLon := (p2.Lng - p.Lng) * math.Pi / 180.0
 
 	bx := math.Cos(lat2) * math.Cos(dLon)
 	by := math.Cos(lat2) * math.Sin(dLon)
@@ -127,7 +117,7 @@ func (p *Point) MidpointTo(p2 *Point) *Point {
 // Renders the current Point to valid JSON.
 // Implements the json.Marshaller Interface.
 func (p *Point) MarshalJSON() ([]byte, error) {
-	res := fmt.Sprintf(`{"lat":%v, "lng":%v}`, p.lat, p.lng)
+	res := fmt.Sprintf(`{"lat":%v, "lng":%v}`, p.Lat, p.Lng)
 	return []byte(res), nil
 }
 

@@ -68,7 +68,7 @@ func (p *Polygon) Contains(point *Point) bool {
 func (p *Polygon) intersectsWithRaycast(point *Point, start *Point, end *Point) bool {
 	// Always ensure that the the first point
 	// has a y coordinate that is less than the second point
-	if start.lng > end.lng {
+	if start.Lng > end.Lng {
 
 		// Switch the points if otherwise.
 		start, end = end, start
@@ -78,35 +78,35 @@ func (p *Polygon) intersectsWithRaycast(point *Point, start *Point, end *Point) 
 	// Move the point's y coordinate
 	// outside of the bounds of the testing region
 	// so we can start drawing a ray
-	for point.lng == start.lng || point.lng == end.lng {
-		newLng := math.Nextafter(point.lng, math.Inf(1))
-		point = NewPoint(point.lat, newLng)
+	for point.Lng == start.Lng || point.Lng == end.Lng {
+		newLng := math.Nextafter(point.Lng, math.Inf(1))
+		point = NewPoint(point.Lat, newLng)
 	}
 
 	// If we are outside of the polygon, indicate so.
-	if point.lng < start.lng || point.lng > end.lng {
+	if point.Lng < start.Lng || point.Lng > end.Lng {
 		return false
 	}
 
-	if start.lat > end.lat {
-		if point.lat > start.lat {
+	if start.Lat > end.Lat {
+		if point.Lat > start.Lat {
 			return false
 		}
-		if point.lat < end.lat {
+		if point.Lat < end.Lat {
 			return true
 		}
 
 	} else {
-		if point.lat > end.lat {
+		if point.Lat > end.Lat {
 			return false
 		}
-		if point.lat < start.lat {
+		if point.Lat < start.Lat {
 			return true
 		}
 	}
 
-	raySlope := (point.lng - start.lng) / (point.lat - start.lat)
-	diagSlope := (end.lng - start.lng) / (end.lat - start.lat)
+	raySlope := (point.Lng - start.Lng) / (point.Lat - start.Lat)
+	diagSlope := (end.Lng - start.Lng) / (end.Lat - start.Lat)
 
 	return raySlope >= diagSlope
 }
